@@ -15,7 +15,7 @@ namespace azure_web_api.Data
         }
         private Container GetContainerClient()
         {
-            string secretValue = _secretManager.GetSecret("cosmos-db-connectionstring");
+            //string secretValue = _secretManager.GetSecret("cosmos-db-connectionstring");
             var cosmosDbClient = new CosmosClient(CosmosDbConnectionString);
             var container = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
             return container;
