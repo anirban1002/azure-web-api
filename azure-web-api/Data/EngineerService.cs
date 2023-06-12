@@ -4,12 +4,18 @@ namespace azure_web_api.Data
 {
     public class EngineerService : IEngineerService
     {
+        private readonly IKeyVaultManager _secretManager;
         public readonly string CosmosDbConnectionString = "AccountEndpoint=https://azure-dev-cosmos-db.documents.azure.com:443/;AccountKey=UrMiRa7zkfilj5k6DhgAdSXZJQHOMpVed8Kb4fUUQiagiISx9Nx2pNHqnNNVCDirb0hPtXXUhz09ACDbCTQQjw==;";
         public readonly string CosmosDbName = "Constractors";
         public readonly string CosmosDbContainerName = "Engineers";
 
+        public EngineerService(IKeyVaultManager secretManager)
+        {
+            _secretManager = secretManager;
+        }
         private Container GetContainerClient()
         {
+            string secretValue = _secretManager.GetSecret("cosmos-db-connectionstring");
             var cosmosDbClient = new CosmosClient(CosmosDbConnectionString);
             var container = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
             return container;
