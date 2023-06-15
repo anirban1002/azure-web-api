@@ -1,22 +1,34 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.Azure.Cosmos;
 
 namespace azure_web_api.Data
 {
     public class EngineerService : IEngineerService
     {
-        private readonly IKeyVaultManager _secretManager;
+        //private readonly IKeyVaultManager _secretManager;
+        //private readonly IConfiguration _configuration;
         public readonly string CosmosDbConnectionString = "AccountEndpoint=https://azure-dev-cosmos-db.documents.azure.com:443/;AccountKey=UrMiRa7zkfilj5k6DhgAdSXZJQHOMpVed8Kb4fUUQiagiISx9Nx2pNHqnNNVCDirb0hPtXXUhz09ACDbCTQQjw==;";
         public readonly string CosmosDbName = "Constractors";
         public readonly string CosmosDbContainerName = "Engineers";
 
-        public EngineerService(IKeyVaultManager secretManager)
-        {
-            _secretManager = secretManager;
-        }
+        //public EngineerService(IKeyVaultManager secretManager, IConfiguration configuration)
+        //{
+        //    _secretManager = secretManager;
+        //    _configuration = configuration;
+        //}
         private Container GetContainerClient()
         {
             //string secretValue = _secretManager.GetSecret("cosmos-db-connectionstring");
-            var cosmosDbClient = new CosmosClient(CosmosDbConnectionString);
+            //string connectionString = _configuration["cosmos-db-connectionstring"];
+
+            SecretClient secretClient = new SecretClient(new Uri("https://az-learning-key-vault.vault.azure.net/"),
+                new DefaultAzureCredential());
+
+            KeyVaultSecret keyVaultSecret = secretClient.GetSecret("cosmos-db-connectionstring");
+
+            //var cosmosDbClient = new CosmosClient(CosmosDbConnectionString);
+            var cosmosDbClient = new CosmosClient(keyVaultSecret.Value);
             var container = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
             return container;
         }
