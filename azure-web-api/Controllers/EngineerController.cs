@@ -28,13 +28,13 @@ namespace azure_web_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> AddEngineer([FromBody] Engineer engineer)
+        public async Task<ActionResult<Engineer>> AddEngineer([FromBody] Engineer engineer)
         {
             return Ok(await _engineerService.AddEngineer(engineer));
         }
 
         [HttpPut]
-        public async Task<ActionResult<string>> UpdateEngineer([FromBody] Engineer engineer)
+        public async Task<ActionResult<Engineer>> UpdateEngineer([FromBody] Engineer engineer)
         {
             return Ok(await _engineerService.UpdateEngineer(engineer));
         }

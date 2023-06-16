@@ -1,4 +1,4 @@
-namespace APINUnitTests
+namespace EngineerNUnitTest
 {
     public class Tests
     {

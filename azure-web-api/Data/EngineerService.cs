@@ -32,31 +32,31 @@ namespace azure_web_api.Data
             var container = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
             return container;
         }
-        public async Task<string> AddEngineer(Engineer engineer)
+        public async Task<Engineer> AddEngineer(Engineer engineer)
         {
             try
             {
                 engineer.id = Guid.NewGuid();
                 var container = GetContainerClient();
                 var response = await container.CreateItemAsync(engineer, new PartitionKey(engineer.id.ToString()));
-                return response.StatusCode.ToString();
+                return response;
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                throw ex;
             }
         }
-        public async Task<string> UpdateEngineer(Engineer engineer)
+        public async Task<Engineer> UpdateEngineer(Engineer engineer)
         {
             try
             {
                 var container = GetContainerClient();
                 var response = await container.UpsertItemAsync(engineer, new PartitionKey(engineer.id.ToString()));
-                return response.StatusCode.ToString();
+                return response;
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                throw ex;
             }
         }
         public async Task<string> DeleteEngineer(string? id, string? partitionKey)
